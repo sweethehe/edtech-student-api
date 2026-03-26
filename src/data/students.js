@@ -1,4 +1,4 @@
-//* Initialisation de la base de données des étudiants
+// Initialisation de la base de données des étudiants
 const initialStudents = [
   {
     id: 1,
@@ -42,15 +42,15 @@ const initialStudents = [
   },
 ];
 
-//* Copie de la base de données, une bd modifiable
+// Copie de la base de données, une bd modifiable
 let students = [...initialStudents];
 
-//* Fonction pour rénitialiser la base de donnée
+// Fonction pour rénitialiser la base de donnée
 const resetStudents = () => {
   students = [...initialStudents];
 };
 
-//* Exportation des fonctions pour l'API
+// Exportation des fonctions pour l'API
 module.exports = {
   students,
   resetStudents
