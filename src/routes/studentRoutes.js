@@ -92,5 +92,63 @@ router.get('/:id', (req, res) => {
     return res.status(200).json(student);
 });
 
+
+// FONCTION DE VALIDATION
+
+const validateStudentData = (data, currentStudentId = null) => {
+    // On extrait les données du Body
+    const { firstName, lastName, email, grade, field } = data;
+    const validFields = ["informatique", "mathématiques", "physique", "chimie"];
+
+    // 1. Tous les champs sont obligatoires
+    if (!firstName || !lastName || !email || grade === undefined || !field) {
+        return { error: "Tous les champs sont obligatoires.", status: 400 };
+    }
+    // 2. Prénom et nom : min 2 caractères
+    if (firstName.length < 2 || lastName.length < 2) {
+        return { error: "Le prénom et le nom doivent faire au moins 2 caractères.", status: 400 };
+    }
+    // 3. Format email (avec une petite expression régulière basique)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return { error: "Le format de l'email est invalide.", status: 400 };
+    }
+    // 4. Note entre 0 et 20
+    if (grade < 0 || grade > 20) {
+        return { error: "La note doit être comprise entre 0 et 20.", status: 400 };
+    }
+    // 5. Filière autorisée
+    if (!validFields.includes(field)) {
+        return { error: "La filière n'est pas valide.", status: 400 };
+    }
+    // 6. Email unique
+    const emailExists = students.find(s => s.email === email && s.id !== currentStudentId);
+    if (emailExists) {
+        return { error: "Cet email est déjà pris.", status: 409 };
+    }
+
+    return null;
+};
+
+// ROUTE 5 : Créer un étudiant (POST /students)
+
+router.post('/', (req, res) => {
+    // On passe les données à la fonction de validation
+    const validationError = validateStudentData(req.body);
+    if (validationError) {
+        return res.status(validationError.status).json({ error: validationError.error });
+    }
+
+    // On génère un nouvel ID (le plus grand ID actuel + 1)
+    const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+    
+    // On crée le nouvel étudiant et on l'ajoute au tableau
+    const newStudent = { id: newId, ...req.body };
+    students.push(newStudent);
+
+    // 201 => L'etudiant à été créé avec succès
+    return res.status(201).json(newStudent);
+});
+
 // On exporte le routeur
 module.exports = router;
