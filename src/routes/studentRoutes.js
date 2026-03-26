@@ -150,5 +150,40 @@ router.post('/', (req, res) => {
     return res.status(201).json(newStudent);
 });
 
+// ROUTE 6 : Modifier un étudiant (PUT /students/:id)
+
+router.put('/:id', (req, res) => {
+    const requestedId = parseInt(req.params.id);
+    if (isNaN(requestedId)) return res.status(400).json({ error: "ID invalide." });
+
+    // On cherche la position (l'index) de l'étudiant dans le tableau
+    const studentIndex = students.findIndex(s => s.id === requestedId);
+    if (studentIndex === -1) return res.status(404).json({ error: "Étudiant introuvable." });
+
+    // On passe les données à notre douane (en lui donnant l'ID actuel pour l'histoire de l'email)
+    const validationError = validateStudentData(req.body, requestedId);
+    if (validationError) {
+        return res.status(validationError.status).json({ error: validationError.error });
+    }
+
+    // On met à jour l'étudiant avec les nouvelles données
+    students[studentIndex] = { ...students[studentIndex], ...req.body };
+    return res.status(200).json(students[studentIndex]);
+});
+
+// ROUTE 7 : Supprimer un étudiant (DELETE /students/:id)
+
+router.delete('/:id', (req, res) => {
+    const requestedId = parseInt(req.params.id);
+    if (isNaN(requestedId)) return res.status(400).json({ error: "ID invalide." });
+
+    const studentIndex = students.findIndex(s => s.id === requestedId);
+    if (studentIndex === -1) return res.status(404).json({ error: "Étudiant introuvable." });
+
+    // splice(index, 1) supprime 1 élément du tableau à partir de l'index donné
+    students.splice(studentIndex, 1);
+    return res.status(200).json({ message: "Étudiant supprimé avec succès." });
+});
+
 // On exporte le routeur
 module.exports = router;
