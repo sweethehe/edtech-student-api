@@ -2,7 +2,7 @@
 const initialStudents = [
   {
     id: 1,
-    firstname: "Enora",
+    firstName: "Enora",
     lastName: "AMADOU",
     email: "enora@exemple.com",
     grade: 17,
