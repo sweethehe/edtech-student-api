@@ -66,10 +66,13 @@ router.get('/search', (req, res) => {
     const searchTerm = q.toLowerCase();
 
     // On filtre le tableau : on garde l'étudiant si son prénom OU son nom contient le terme
-    const results = students.filter(student => 
-        student.firstName.toLowerCase().includes(searchTerm) ||
-        student.lastName.toLowerCase().includes(searchTerm)
-    );
+    const results = students.filter(student => {
+        const fName = student.firstName || "";
+        const lName = student.lastName || "";
+        
+        return fName.toLowerCase().includes(searchTerm) || 
+               lName.toLowerCase().includes(searchTerm);
+    });
 
     return res.status(200).json(results);
 });
@@ -122,7 +125,10 @@ const validateStudentData = (data, currentStudentId = null) => {
         return { error: "La filière n'est pas valide.", status: 400 };
     }
     // 6. Email unique
-    const emailExists = students.find(s => s.email === email && s.id !== currentStudentId);
+    const emailExists = students.find(s => 
+        s.email.toLowerCase() === email.toLowerCase() && 
+        s.id !== currentStudentId
+    );
     if (emailExists) {
         return { error: "Cet email est déjà pris.", status: 409 };
     }
