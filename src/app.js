@@ -7,8 +7,7 @@ const app = express();
 app.use(express.json());
 
 // On importe nos futures routes
-const studentRoutes = require('./routes/studentRoutes');
-
+const studentRoutes = 
 // On dit à Express que toutes les requêtes commençant par /students doivent être gérées par studentRoutes
 app.use('/students', studentRoutes);
 
