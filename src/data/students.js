@@ -47,7 +47,8 @@ let students = [...initialStudents];
 
 // Fonction pour rénitialiser la base de donnée
 const resetStudents = () => {
-  students = [...initialStudents];
+  students.length = 0;
+  students.push(...initialStudents);
 };
 
 // Exportation des fonctions pour l'API

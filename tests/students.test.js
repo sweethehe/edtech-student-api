@@ -131,6 +131,7 @@ describe('PUT /students/:id - Tests de modification', () => {
         expect(response.statusCode).toBe(404);
     });
 });
+
 // TESTS DELETE
 describe('DELETE /students/:id - Tests de suppression', () => {
     it('12. DELETE avec ID valide doit renvoyer 200', async () => {
@@ -143,5 +144,27 @@ describe('DELETE /students/:id - Tests de suppression', () => {
         const response = await request(app).delete('/students/999');
         
         expect(response.statusCode).toBe(404);
+    });
+});
+
+// TESTS SPECIAL GET
+describe('GET /students/special - Tests de stats et recherche', () => {
+    it('14. GET /students/stats doit renvoyer totalStudents, averageGrade, studentsByField, bestStudent', async () => {
+        const response = await request(app).get('/students/stats');
+        
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('totalStudents');
+        expect(response.body).toHaveProperty('averageGrade');
+        expect(response.body).toHaveProperty('studentsByField');
+        expect(response.body).toHaveProperty('bestStudent');
+    });
+
+    it('15. GET /students/search?q=... doit renvoyer les étudiants correspondants', async () => {
+        const response = await request(app).get('/students/search?q=Enora');
+        
+        expect(response.statusCode).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.length).toBeGreaterThan(0);
+        expect(response.body[0].firstName).toBe("Enora");
     });
 });
