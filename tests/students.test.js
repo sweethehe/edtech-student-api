@@ -7,6 +7,7 @@ beforeEach(() => {
     resetStudents();
 });
 
+// TESTS GET
 describe('GET /students - Tests de lecture', () => {
 
     it('1. doit renvoyer 200 et un tableau', async () => {
@@ -45,6 +46,57 @@ describe('GET /students - Tests de lecture', () => {
         
         expect(response.statusCode).toBe(400);
         expect(response.body.error).toBe("L'ID fourni n'est pas un nombre valide.");
+    });
+
+});
+
+// TESTS POST
+describe('POST /students - Tests de création', () => {
+    it('6. POST avec données valides doit renvoyer 201 + l\'étudiant avec un ID', async () => {
+        const newStudent = {
+            firstName: "Lucas",
+            lastName: "Bernard",
+            email: "lucas@example.com",
+            grade: 15,
+            field: "informatique"
+        };
+        const response = await request(app).post('/students').send(newStudent);
+        
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty('id');
+        expect(response.body.firstName).toBe("Lucas");
+    });
+
+    it('7. POST sans champ obligatoire doit renvoyer 400', async () => {
+        const incompleteStudent = { firstName: "Lucas" };
+        const response = await request(app).post('/students').send(incompleteStudent);
+        
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('8. POST avec note invalide (ex: 25) doit renvoyer 400', async () => {
+        const invalidGradeStudent = {
+            firstName: "Note",
+            lastName: "TropHaute",
+            email: "test@note.com",
+            grade: 25
+        };
+        const response = await request(app).post('/students').send(invalidGradeStudent);
+        
+        expect(response.statusCode).toBe(400);
+    });
+
+    it('9. POST avec email déjà existant doit renvoyer 409', async () => {
+        const duplicateEmailStudent = {
+            firstName: "Double",
+            lastName: "Email",
+            email: "enora@exemple.com",
+            grade: 10,
+            field: "informatique"
+        };
+        const response = await request(app).post('/students').send(duplicateEmailStudent);
+        
+        expect(response.statusCode).toBe(409);
     });
 
 });
