@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "node node_modules/eslint/bin/eslint.js src tests"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "eslint": "^10.1.0",
     "jest": "^30.3.0",
     "supertest": "^7.2.2"

@@ -5,5 +5,6 @@ const PORT = 3000;
 
 // On lance le serveur
 app.listen(PORT, () => {
-  console.log(`Le serveur tourne sur http://localhost:${PORT} hihihi <3`);
+    // eslint-disable-next-line no-console
+    console.log(`Le serveur tourne sur http://localhost:${PORT} hihihi <3`);
 });

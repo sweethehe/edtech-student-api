@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app');
-const { students, resetStudents } = require('../src/data/students');
+const { resetStudents } = require('../src/data/students');
 
 // Avant CHAQUE test, on remet la base de données à zéro
 beforeEach(() => {
