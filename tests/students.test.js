@@ -100,3 +100,34 @@ describe('POST /students - Tests de création', () => {
     });
 
 });
+
+// TESTS PUT
+describe('PUT /students/:id - Tests de modification', () => {
+    it('10. PUT avec données valides doit renvoyer 200 + l\'étudiant modifié', async () => {
+        const updatedStudent = {
+            firstName: "Enora Modifiée",
+            lastName: "AMADOU",
+            email: "enora@exemple.com",
+            grade: 18,
+            field: "informatique"
+        };
+        const response = await request(app).put('/students/1').send(updatedStudent);
+        
+        expect(response.statusCode).toBe(200);
+        expect(response.body.firstName).toBe("Enora Modifiée");
+        expect(response.body.grade).toBe(18);
+    });
+
+    it('11. PUT avec ID inexistant doit renvoyer 404', async () => {
+        const updatedStudent = {
+            firstName: "Ghost",
+            lastName: "Student",
+            email: "ghost@exemple.com",
+            grade: 10,
+            field: "informatique"
+        };
+        const response = await request(app).put('/students/999').send(updatedStudent);
+        
+        expect(response.statusCode).toBe(404);
+    });
+});
