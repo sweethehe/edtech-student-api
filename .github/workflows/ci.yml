@@ -1,0 +1,37 @@
+name: Pipeline CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  verification:
+    runs-on: ubuntu-latest
+
+    # Voici la fameuse Matrix Strategy exigée par le prof !
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+    - name: Téléchargement du code (Checkout)
+    
+      uses: actions/checkout@v4
+
+    - name: Configuration de Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Installation des dépendances
+      run: npm install
+
+    - name: Linter
+      run: npm run lint
+
+    - name: 🧪 Tests unitaires
+      run: npm test
+
