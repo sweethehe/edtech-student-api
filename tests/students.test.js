@@ -131,3 +131,17 @@ describe('PUT /students/:id - Tests de modification', () => {
         expect(response.statusCode).toBe(404);
     });
 });
+// TESTS DELETE
+describe('DELETE /students/:id - Tests de suppression', () => {
+    it('12. DELETE avec ID valide doit renvoyer 200', async () => {
+        const response = await request(app).delete('/students/1');
+        
+        expect(response.statusCode).toBe(200);
+    });
+
+    it('13. DELETE avec ID inexistant doit renvoyer 404', async () => {
+        const response = await request(app).delete('/students/999');
+        
+        expect(response.statusCode).toBe(404);
+    });
+});
